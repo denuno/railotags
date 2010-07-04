@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<extensions>
+<extension>
+	<extensionId>cfjasperreport</extensionId>
+	<extensionType>all</extensionType>
+	<extensionName>cfjasperreport</extensionName>
+	<extensionLabel>cfjasperreport</extensionLabel>
+	<extensionCodename>harbinger</extensionCodename>
+	<extensionDescription>A utility tag for running ant scripts within CF</extensionDescription>
+	<extensionSources>Utility</extensionSources>
+	<extensionAuthor>denstar</extensionAuthor>
+	<extensionCategory>Utility</extensionCategory>
+	<extensionImage>http://www.getrailo.org/tasks/sites/railoorg/assets/Image/Images/railo-3-1-release.png</extensionImage>
+	<extensionSupport>http://coldshen.com</extensionSupport>
+	<extensionDocumentation>http://coldshen.com</extensionDocumentation>
+	<extensionForum>http://coldshen.com</extensionForum>
+	<extensionCreated>07-03-2010 20:40:23</extensionCreated>
+	<extensionVersion>00.00.00</extensionVersion>
+	<extensionDownload>/extensions/ExtensionProvider.cfc?method=download&amp;id=/cfjasperreport-extension.zip</extensionDownload>
+</extension>
+</extensions>
