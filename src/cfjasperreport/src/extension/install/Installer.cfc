@@ -37,7 +37,10 @@
 					overwrite = "yes"
 					recurse = "yes"
 					storePath = "yes" />
+					<cfset cfcext = '<cfcomponent extends="#variables.extensionTag#/cfc/#rereplace(variables.extensionTag,"^cf","")#"></cfcomponent>' />
+					<cffile action="write" file="#getLibraryPath()#/tag/#variables.extensionTag#.cfc" output="#cfcext#" />
 				<cfset addCustomTagsMapping("#getLibraryPath()#/tag/#variables.extensionTag#") />
+
 			<cfelse>
 				<cfzip
 					action = "unzip"
