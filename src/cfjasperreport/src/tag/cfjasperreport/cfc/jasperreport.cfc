@@ -8,6 +8,7 @@
 		exporttype:			{required:false,type:"string",default:"pdf"},
 		exportfile:			{required:false,type:"string",default:""},
 		dsn:			{required:false,type:"string",default:""},
+		datasource:			{required:false,type:"string",default:""},
 		params:			{required:false,type:"struct"},
 		sqlstring:			{required:false,type:"string",default:""},
 		datafile:			{required:false,type:"any",default:""},
@@ -44,6 +45,9 @@
 		<cfscript>
 			var report = "";
 			var runFunk = this[attributes.action];
+			if(attributes.dsn neq "") {
+				attributes.datasource = attributes.dsn;
+			}
 			var results = runFunk(argumentCollection=attributes);
 			if(attributes.action == "runReport") {
 				if(attributes.exportfile gt "") {
@@ -68,6 +72,8 @@
 		<cfargument name="reportparams" default="#structNew()#" />
 		<cfargument name="download" default="no" />
 		<cfargument name="newquery" default="" />
+		<cfargument name="locale" default="US" />
+		<cfargument name="localeLanguage" default="ENGLISH" />
 		<cflock name="jasperLock" type="exclusive" timeout="10">
 			<cfif fileExists(arguments.jrxml)>
 				<cfset var daJRXML = readJRXMLFile(arguments.jrxml) />
@@ -86,19 +92,25 @@
 				var parameters = CreateObject("java", "java.util.HashMap");
 				var ka = structNew();
 				var daConnection = "";
+				var LocaleOb = createObject("java","java.util.Locale");
+				var JRParameter = createObject("java","net.sf.jasperreports.engine.JRParameter");
+				
 				if(NOT isStruct(params)) {
 					params = structNew();
 				}
 				var ka = StructKeyArray(params);
 				// convert params to hashmap
 				for(i=1; i LTE ArrayLen(ka); i=i+1){
-					parameters.put(ka[i], Evaluate("params." & ka[i]));
+					parameters.put(ka[i], params[ka[i]]);
 				}
 				if(findNoCase("language=""groovy""",daXM)) {
 					throw("jasperreports.compile.error","ask denny how to run groovy expressions, or remove language=""groovy"" from your JRXML file.");
 				}
+				if(arguments.locale gt "") {
+					parameters.put(JRParameter.REPORT_LOCALE, LocaleOb[ucase(locale)]);
+				}
 				
-				/*				
+				/*
 				dicking around to get groovy expressions to work-- might need to specifically 
 				use JRGroovyCompiler and set path.  Groovy works if all jars are in JVM classpath.
 				
@@ -110,35 +122,28 @@
 				  jrprops.setProperty(jrprops.COMPILER_CLASSPATH, jasperclasspath);
 				*/
 				
-				
-				if(datasource gt "") {
+				if(datasource gt "" && listLast(datasource,".") == "xml") {
+					var file = createObject("java","java.io.File");
+					var jRXmlDataSource = CreateObject("java","net.sf.jasperreports.engine.data.JRXmlDataSource");
+					daConnection = jRXmlDataSource.init(file.init(datafile));
+				} else if(datasource eq "empty") {
+					daConnection = createObject("java","net.sf.jasperreports.engine.JREmptyDataSource");
+				} else if(datasource neq "") {
 					var daFactory = CreateObject ("Java","coldfusion.server.ServiceFactory");
 					daConnection = daFactory.getDataSourceService().getDatasource(dataSource).getConnection();
-				} else if (datafile !="") {
+				} 
+				
+				if (datafile !="") {
 					if(listLast(datafile,".") == "xml") {
-					/* 
-					 		JRParameter = createObject("java","net.sf.jasperreports.engine.JRParameter");
-					 		JRloader = createObject("java","net.sf.jasperreports.engine.util.JRLoader");
-					 		Locale = createObject("java","java.util.Locale");
-							JRXPathQueryExecuterFactory = createObject("java","net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory");
-							JRXmlUtils = createObject("java","net.sf.jasperreports.engine.util.JRXmlUtils");
-							document = JRXmlUtils.parse(JRLoader.getLocationInputStream(datafile));
-							parameters.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, document);
-							parameters.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, "yyyy-MM-dd");
-							parameters.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, "##,####0.####");
-							parameters.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
-							parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
-							parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
-					 */
-						var file = createObject("java","java.io.File");
-						var jRXmlDataSource = CreateObject("java","net.sf.jasperreports.engine.data.JRXmlDataSource");
-						daConnection = jRXmlDataSource.init(file.init(datafile));
+				 		//JRloader = createObject("java","net.sf.jasperreports.engine.util.JRLoader");
+						var JRXPathQueryExecuterFactory = createObject("java","net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory");
+						parameters.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, xmlParse(datafile));
+						parameters.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, "yyyy-MM-dd");
+						parameters.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, "##,####0.####");
+						parameters.put(JRXPathQueryExecuterFactory.XML_LOCALE, LocaleOb[ucase(localeLanguage)]);
 					} else {
 						throw(type="cfjasperreport.datafile.error", message="unsupported datafile type #datafile#");
 					}
-				}
-				else {
-					daConnection = createObject("java","net.sf.jasperreports.engine.JREmptyDataSource");
 				}
 				var jasperFillManager = CreateObject("java","net.sf.jasperreports.engine.JasperFillManager");
 				//JasperFillManager.fillReportToFile(fileName, null,
@@ -168,14 +173,18 @@
 					else if (datasource gt ""){
 						try{
 							jasperPrint = jasperFillManager.fillReport(jasperReport, parameters, daConnection);
-							daConnection.close();
+							try {
+								daConnection.close();
+							} catch(any e) {
+								// we do not care, only certain datasources need closing
+							}
 						}
 						catch(JRException e){
 							throw(type="cfjasperreport.error", message=e.printStackTrace());
 						}
 					} else {
 						try{
-							jasperPrint = jasperFillManager.fillReport(jasperReport, parameters,daConnection);
+							jasperPrint = jasperFillManager.fillReport(jasperReport, parameters);
 						}
 						catch(JRException e){
 							throw(type="cfjasperreport.error", message=e.printStackTrace());
@@ -309,7 +318,7 @@
 			<cfset cvalue = 'attachment;' />
 		</cfif>
 		<cfset cvalue = cvalue & "filename=#arguments.fileName#" />
-		<cfheader name="Content-Disposition" value="#cvalue#">
+		<cfheader name="Content-Disposition" value="#cvalue#" charset="utf-8">
 		<!--- 
 			<cfdump var="#filecontent#" abort>
 			--->
