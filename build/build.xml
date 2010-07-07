@@ -8,23 +8,32 @@
 		<!--
 		<mapping physical="${basedir}/../../docs" virtual="/docs"/>
 		-->
-		<mapping physical="${basedir}/../test" virtual="/test"/>
+		<mapping physical="${basedir}/../tests" virtual="/tests"/>
 		<mapping physical="${basedir}/../pub" virtual="/pub"/>
 		<!-- add custom tags example
 		<customtag physical="${src.dir}/cfdistro/ext/cfmltags/cfantrunner" virtual="/cfantrunner"/>
 		 -->
 		<!-- run cfdistro build -->
 		<antcontrib:runtarget target="cfdistro.build.localdev" />
+		<extensionprovider url="http://localhost:${runwar.port}/extensions/ExtensionProvider.cfc"/>
 		<!-- use fileServlet to map external resources  -->
 		<fileservlet servletname="fileServlet" directory="${src.dir}/../pub" urlpattern="/pub/*"/>
 		<!-- add urlrewrite filter and rewrite rules -->
 		<!-- getting "Failed to specify text in replace" means you need to escape & like so:  &amp;amp;-->
 		<antcontrib:runtarget target="urlrewritefilter.servlet.install" />
 		<urlrewrite name="root" note="MAP / TO DEFAULT VIEW" 
-			from="^/$" to="/index.cfm" type="forward"/>
+			from="^/$" to="/pub/index.cfm" type="forward"/>
+<!--
+		<urlrewrite name="railo" note="SERVE RAILO ADMIN"
+			from="/railo-context/(.*)" to="/railo-context/$1" type="forward" last="true"/>
+		<urlrewrite name="mxunit" note="mxunit"
+			from="/mxunit/(.*)" to="/mxunit/$1" type="forward" last="true"/>
+		<urlrewrite name="extensions" note="SERVE RAILO EXTENSIONS"
+			from="/extensions/(.*)" to="/extensions/$1" type="forward" last="true"/>
 		<urlrewrite name="rootToPub" note="SERVE EVERYTHING FROM PUB"
 			from="/(.*)" to="/pub/$1" type="forward"/>
 		<urlrewriteout name="pubToRoot" from="^/pub/(.*)" to="/$1"/>
+-->
 		<urlrewriteout name="rootToContextPath" from="/(.*)" to="%{context-path}/$1" type="forward"/>
 		<!--
 		<antcontrib:if>

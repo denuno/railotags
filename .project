@@ -1,10 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>railotags</name>
-  <comment></comment>
-  <projects></projects>
-  <buildSpec></buildSpec>
-  <natures></natures>
+	<name>railotags</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>railorunner.railoBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.cfeclipse.cfml.CFENature</nature>
+		<nature>railorunner.RailoNature</nature>
+	</natures>
 </projectDescription>
-

@@ -38,7 +38,7 @@
 					recurse = "yes"
 					storePath = "yes" />
 					<cfset cfcext = '<cfcomponent extends="#variables.extensionTag#/cfc/#rereplace(variables.extensionTag,"^cf","")#"></cfcomponent>' />
-					<cffile action="write" file="#getLibraryPath()#/tag/#variables.extensionTag#.cfc" output="#cfcext#" />
+					<cffile action="write" file="#getLibraryPath()#/tag/#rereplace(variables.extensionTag,'^cf','')#.cfc" output="#cfcext#" />
 				<cfset addCustomTagsMapping("#getLibraryPath()#/tag/#variables.extensionTag#") />
 
 			<cfelse>
