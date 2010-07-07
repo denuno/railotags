@@ -13,6 +13,8 @@
 		sqlstring:			{required:false,type:"string",default:""},
 		datafile:			{required:false,type:"any",default:""},
 		resultsVar: {required:false,type:"string",default:"report"},
+		resourcebundle: {required:false,type:"string",default:""},
+		datasourcexpath: {required:false,type:"string",default:""},
 		filename:			{required:false,type:"string",default:"report"},
 		forceDownload: {required:false,type:"boolean",default:"false"}
 		} />
@@ -72,6 +74,7 @@
 		<cfargument name="reportparams" default="#structNew()#" />
 		<cfargument name="download" default="no" />
 		<cfargument name="newquery" default="" />
+		<cfargument name="resourcebundle" default="" />
 		<cfargument name="locale" default="US" />
 		<cfargument name="localeLanguage" default="ENGLISH" />
 		<cflock name="jasperLock" type="exclusive" timeout="10">
@@ -94,6 +97,8 @@
 				var daConnection = "";
 				var LocaleOb = createObject("java","java.util.Locale");
 				var JRParameter = createObject("java","net.sf.jasperreports.engine.JRParameter");
+				var FileOb = createObject("java","java.io.File");
+				
 				
 				if(NOT isStruct(params)) {
 					params = structNew();
@@ -109,7 +114,11 @@
 				if(arguments.locale gt "") {
 					parameters.put(JRParameter.REPORT_LOCALE, LocaleOb[ucase(locale)]);
 				}
-				
+				if(arguments.resourcebundle gt "") {
+					var rbStream = CreateObject("java","java.io.ByteArrayInputStream").init(readBinaryFile(arguments.resourceBundle));
+					var rb = createObject("java","java.util.PropertyResourceBundle").init(rbStream);
+					parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, rb);
+				}
 				/*
 				dicking around to get groovy expressions to work-- might need to specifically 
 				use JRGroovyCompiler and set path.  Groovy works if all jars are in JVM classpath.
@@ -123,9 +132,7 @@
 				*/
 				
 				if(datasource gt "" && listLast(datasource,".") == "xml") {
-					var file = createObject("java","java.io.File");
-					var jRXmlDataSource = CreateObject("java","net.sf.jasperreports.engine.data.JRXmlDataSource");
-					daConnection = jRXmlDataSource.init(file.init(datafile));
+					daConnection = jrdatasource(datasource);
 				} else if(datasource eq "empty") {
 					daConnection = createObject("java","net.sf.jasperreports.engine.JREmptyDataSource");
 				} else if(datasource neq "") {
@@ -212,6 +219,27 @@
 					return argy;
 			</cfscript> 
 		</cflock>
+	</cffunction>
+
+	<cffunction name="jrdatasource">
+		<cfargument name="datasource">
+		<cfargument name="datasourcexpath" default="" />
+		<cfscript>
+			var jRDataSource = "";
+			var FileOb = createObject("java","java.io.File");
+			if(listLast(datasource,".") eq "csv") {
+				jRDataSource = CreateObject("java","net.sf.jasperreports.engine.data.JRCsvDataSource").init(FileOb.init(datasource));				
+			} else if(datasource gt "" && listLast(datasource,".") == "xml") {
+				var jRXmlDataSource = CreateObject("java","net.sf.jasperreports.engine.data.JRXmlDataSource");
+					jRDataSource = jRXmlDataSource.init(FileOb.init(datasource));
+				if(arguments.datasourcexpath gt "") {
+					jRDataSource.datasource(datasourcexpath);					
+				}
+			} else {
+				throw(type="cfjasperreport.datafile.error", message="unsupported datafile type #datafile#");			
+			}
+			return jRDataSource;
+		</cfscript>
 	</cffunction>
 
 	<cffunction name="compile">
