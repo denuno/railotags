@@ -4,3 +4,5 @@
 #gmail.password=fournick8
 #dsn.username=sa
 #dsn.password=
+svn.getrailo.user=guest
+svn.getrailo.password=guest

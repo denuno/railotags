@@ -1,11 +1,11 @@
 <datasources>
 
 	<datasource 
-		name="railotags" 
+		name="railoprojects" 
 		class="org.h2.Driver" 
 		host="localhost" 
 		port="3306" 
-		database="${distro.name}"
+		database="railoprojects"
 		username="@dsn.username@" 
 		password="@dsn.password@" 
 		blob="false"

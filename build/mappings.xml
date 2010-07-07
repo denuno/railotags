@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <mappings>
-<!--
-  <mapping physical="@src.dir@/cfdistro" virtual="/cfdistro"/>
- -->
+  <mapping physical="@src.dir@/cfjasperreport" virtual="/cfjasperreport"/>
+  <mapping physical="@src.dir@/extensions" virtual="/extensions"/>
+  <mapping physical="@src.dir@/mxunit" virtual="/mxunit"/>
+<mapping physical="/workspace/railotags/build/../tests" virtual="/tests"/>
+<mapping physical="/workspace/railotags/build/../pub" virtual="/pub"/>
 </mappings>
