@@ -16,11 +16,11 @@
 	</project>
 	<sources>
 
+<!-- 
 		<src dest="@src.dir@/mxunit" type="svn"
 		uri="http://mxunit.googlecode.com/svn/mxunit/trunk"
 		user="" password="" />
 
-<!-- 
 		<src dest="@src.dir@/cfwheels" type="svn" 
 		uri="http://cfwheels.googlecode.com/svn/trunk/" 
 		user="" password="" />
