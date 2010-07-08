@@ -48,7 +48,7 @@
 						</init-param>
 					</servlet>
 					<servlet-mapping>
-					    <servlet-name>@{servletname}</servlet-name>
+					    <servlet-name>fileServlet</servlet-name>
 					    <url-pattern>@{urlpattern}</url-pattern>
 					</servlet-mapping>
 					]]>

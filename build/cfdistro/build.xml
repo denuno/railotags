@@ -133,7 +133,7 @@
 	<import file="build-acf.xml" />
 	<import file="build-obd.xml" />
 	<import file="java/runwar/build.xml" />
-	<import file="sshtunnel.xml" />
+	<import file="deploy.xml" />
 	<import file="urlrewritefilter.xml" />
 	<import file="servlet-mappings.xml" />
 	<import file="tests.xml" />
@@ -178,7 +178,7 @@
 	</target>
 
 	<target name="cfdistro.skeleton" description="creates a distro skeleton in ${target.dir} named ${distro.name}">
-		<property name="prop.message" value="is required! ${line.separator} Example: ant -Dtarget.dir=/var/www/superdistro -Ddistro.name=superdistro cfdistro.skeleton"/>
+		<property name="prop.message" value="is required! ${line.separator} Example: ant -Dtarget.dir=/var/www/superdistro -Ddistro.name=superdistro cfdistro.skeleton.default"/>
 		<fail message="target.dir ${prop.message}" unless="target.dir"/>
 		<fail message="distro.name ${prop.message}" unless="distro.name"/>
 		<echo message="creating distro build: ${distro.name} ${target.dir}" />
@@ -216,7 +216,7 @@
 		<move file="${target.dir}/build/build.xml.txt" tofile="${target.dir}/build/build.xml"/>
 	</target>
 
-	<target name="build.localdev" depends="clean" description="builds the localdev environment">
+	<target name="build.localdev" depends="clean" description="local development build">
 		<property name="build.type" value="localdev" />
 		<antcontrib:runtarget target="${default.cfengine}.build.war.${build.type}" />
 		<!-- <antcontrib:runtarget target="servlet.fileservlet.install" /> -->
@@ -234,17 +234,17 @@
 		</sequential>
 	</target>
 
-	<target name="build.dev" description="runs the dev build">
+	<target name="build.dev" description="development build">
 		<property name="build.type" value="dev" />
 		<antcontrib:runtarget target="${default.cfengine}.build.war.src" />
 	</target>
 
-	<target name="build.qa" description="runs the QA build">
+	<target name="build.qa" description="QA build">
 		<property name="build.type" value="qa" />
 		<antcontrib:runtarget target="${default.cfengine}.build.war.${build.type}" />
 	</target>
 
-	<target name="build.prod" description="runs the production build">
+	<target name="build.prod" description="production build">
 		<property name="build.type" value="prod" />
 		<antcontrib:runtarget target="${default.cfengine}.build.war.${build.type}" />
 	</target>
@@ -699,7 +699,7 @@
 		</java>
 	</target>
 
-	<target name="cfdistro.dist" depends="clean">
+	<target name="cfdistro.dist" depends="clean" description="creats a minimal build">
 		<copy todir="${dist.dir}/${distro.name}-build/build" verbose="false">
 			<fileset dir="${basedir}/" excludesfile="${creds.token.file}"/>
 		</copy>
@@ -710,20 +710,24 @@
 		<copy todir="${dist.dir}/${distro.name}-build/build/cfdistro" verbose="false">
 			<fileset dir="${cfdistro.basedir}/" excludes="ext/**" />
 		</copy>
+		<echo file="${dist.dir}/${distro.name}-build/${distro.name}.sh"><![CDATA[#! /bin/sh
+export ANT_HOME="build/cfdistro/ant/"
+build/cfdistro/ant/bin/ant -f build/build.xml $1
+		]]>
+		</echo>
+		<chmod file="${dist.dir}/${distro.name}-build/${distro.name}.sh" perm="ugo+rx"/>
+		<chmod file="${dist.dir}/${distro.name}-build/build/cfdistro/ant/bin/ant" perm="ugo+rx"/>
 		<zip destfile="${dist.dir}/${distro.name}-build.zip" basedir="${dist.dir}/${distro.name}-build/"/>
 	</target>
 
 	<target name="cfdistro.executable">
-		<echo file="${basedir}/cfdistro.sh">
-			<![CDATA[#! /bin/sh
+		<echo file="${basedir}/cfdistro.sh"><![CDATA[#! /bin/sh
 export ANT_HOME="${cfdistro.basedir}/ant/"
-${cfdistro.basedir}/ant/bin/ant -f build.xml -Dbasedir=${basedir} $1
+${cfdistro.basedir}/ant/bin/ant -f build.xml $1
 		]]>
 		</echo>
 		<chmod file="${basedir}/cfdistro.sh" perm="ugo+rx"/>
-		<echo file="${basedir}/cfdistro.bat">
-			<![CDATA[#! /bin/sh
-set ANT_HOME="${cfdistro.basedir}/ant/"
+		<echo file="${basedir}/cfdistro.bat"><![CDATA[set ANT_HOME="${cfdistro.basedir}/ant/"
 ${cfdistro.basedir}/ant/bin/ant -f build.xml $1
 		]]>
 		</echo>
