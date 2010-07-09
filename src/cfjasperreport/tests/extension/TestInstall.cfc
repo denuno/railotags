@@ -22,7 +22,7 @@
 		<cftry>
 			<cfset testUnInstall() />	
 		<cfcatch>
-			<!--- just in case the test failed --->
+			<!--- just in case a test failed and did not uninstall --->
 		</cfcatch>
 		</cftry>
 	</cffunction>
