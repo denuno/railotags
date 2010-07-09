@@ -47,8 +47,8 @@
  --->
                 
         <cfset var message='#variables.extensionTag# is now successfully installed! Rock on with your bad self.'>
-		<cfif config.isBuiltInTag>
-			<cfset message = message & "<br />P.S. You will need to restrt the server to use the built-in tag.">
+		<cfif config.isBuiltInTag OR config.installTestPlugin>
+			<cfset message = message & "<br />P.S. You will need to restrt the server to use the new functionality!">
 		</cfif>
         <cfreturn message>
         
