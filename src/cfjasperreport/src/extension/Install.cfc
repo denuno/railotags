@@ -25,7 +25,6 @@
 				<cfif directoryExists(getDirectoryFromPath(getMetadata(this).path)&"test")>
 					<cfif config.installTestPlugin>
 						<cfset addTestPlugin(getDirectoryFromPath(getMetadata(this).path)&"test/test.cfm",config.isBuiltInTag) />
-						<cfset addTestPluginFile(getDirectoryFromPath(getMetadata(this).path)&"test/test.jrxml") />
 					<cfelse>
 					</cfif>
 				</cfif>
@@ -48,6 +47,9 @@
  --->
                 
         <cfset var message='#variables.extensionTag# is now successfully installed! Rock on with your bad self.'>
+		<cfif config.isBuiltInTag>
+			<cfset message = message & "<br />P.S. You will need to restrt the server to use the built-in tag.">
+		</cfif>
         <cfreturn message>
         
     </cffunction>

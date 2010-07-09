@@ -30,6 +30,7 @@
 		<cfif find("tag",standards)>
 			<cfset config.isBuiltInTag=config.isBuiltInTag EQ "true" />
 			<cfif config.isBuiltInTag>
+					<cfset request.debug("#getLibraryPath()#/tag")>
 				<cfzip
 					action = "unzip"
 					destination = "#getLibraryPath()#/tag"
@@ -37,8 +38,8 @@
 					overwrite = "yes"
 					recurse = "yes"
 					storePath = "yes" />
-					<cfset cfcext = '<cfcomponent extends="#variables.extensionTag#/cfc/#rereplace(variables.extensionTag,"^cf","")#"></cfcomponent>' />
-					<cffile action="write" file="#getLibraryPath()#/tag/#rereplace(variables.extensionTag,'^cf','')#.cfc" output="#cfcext#" />
+				<cfset cfcext = '<cfcomponent extends="#variables.extensionTag#/cfc/#rereplace(variables.extensionTag,"^cf","")#"></cfcomponent>' />
+				<cffile action="write" file="#getLibraryPath()#/tag/#rereplace(variables.extensionTag,'^cf','')#.cfc" output="#cfcext#" />
 				<cfset addCustomTagsMapping("#getLibraryPath()#/tag/#variables.extensionTag#") />
 
 			<cfelse>
@@ -105,6 +106,10 @@
 					<cfloop query="tags">
 						<cfif type eq "dir">
 							<cfdirectory directory="#getLibraryPath()#/tag/#name#" action="delete" recurse="yes">
+							<cftry><cffile action="delete" file="#getLibraryPath()#/tag/#rereplace(variables.extensionTag,'^cf','')#.cfc"><cfcatch></cfcatch>
+							</cftry>
+							<cftry><cffile action="delete" file="#getLibraryPath()#/tag/#rereplace(variables.extensionTag,'^cf','')#.cfm"><cfcatch></cfcatch>
+							</cftry>
 						<cfelse>
 							<cffile action="delete" file="#getLibraryPath()#/tag/#name#">
 						</cfif>
@@ -240,6 +245,38 @@
 		<cfreturn pluginDir />
 	</cffunction>
 
+	<!---
+	Copies a directory.
+	
+	@param source      Source directory. (Required)
+	@param destination      Destination directory. (Required)
+	@param nameConflict      What to do when a conflict occurs (skip, overwrite, makeunique). Defaults to overwrite. (Optional)
+	@return Returns nothing.
+	@author Joe Rinehart (joe.rinehart@gmail.com)
+	@version 2, February 4, 2010
+	--->
+	<cffunction name="directoryCopy" output="true">
+	    <cfargument name="source" required="true" type="string">
+	    <cfargument name="destination" required="true" type="string">
+	    <cfargument name="nameconflict" required="true" default="overwrite">
+	
+	    <cfset var contents = "" />
+	    
+	    <cfif not(directoryExists(arguments.destination))>
+	        <cfdirectory action="create" directory="#arguments.destination#">
+	    </cfif>
+	    
+	    <cfdirectory action="list" directory="#arguments.source#" name="contents">
+	    
+	    <cfloop query="contents">
+	        <cfif contents.type eq "file">
+	            <cffile action="copy" source="#arguments.source#/#name#" destination="#arguments.destination#/#name#" nameconflict="#arguments.nameConflict#">
+	        <cfelseif contents.type eq "dir">
+	            <cfset directoryCopy(arguments.source & "/" & name, arguments.destination & "/" & name) />
+	        </cfif>
+	    </cfloop>
+	</cffunction>
+	
 	<cffunction name="addTestPlugin" access="private" output="false">
 		<cfargument name="testfile" required="true" />
 		<cfargument name="isBuiltInTag" required="true" type="boolean" />
@@ -284,6 +321,9 @@
 			<cfset test = replace(test,"cf_#rereplace(variables.extensionTag,'^cf','')#","cf#rereplace(variables.extensionTag,'^cf','')#","all") />
 		</cfif>
 		<cffile action="write" file="#pluginDir#/#testfilename#" output="#test#" />
+		<cfif listLast(getDirectoryFromPath(testfile),"\/") eq "test">
+			<cfset directoryCopy(getDirectoryFromPath(testfile),pluginDir) />
+		</cfif>
 		<cfadmin action="reload" type="#request.adminType#" password="#session["password"&request.adminType]#"/> 
 	</cffunction>
 

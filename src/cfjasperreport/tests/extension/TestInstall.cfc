@@ -7,8 +7,26 @@
 		<cfset variables.extensionzip = "/#variables.extensionTag#/dist/#variables.extensionTag#-extension.zip">
 		<cfset variables.defaultconfig = {"mixed":{"isBuiltInTag":true,"installTestPlugin":true}}>
 		<cfset request.adminType = "web" />
-		<cffile action="read" file="#expandpath('/'&variables.extensionTag)#/tests/cfadminpassword.txt" variable="session.password#request.adminType#" />
+		<cfset var passw = "">
+		<cfif NOT fileExists(variables.extensionzip)>
+			<cfset var build = createObject("component","TestBuild") />
+			<cfset build.setUp() />
+			<cfset build.testBuild() />
+		</cfif>
+		<cffile action="read" file="#expandpath('/'&variables.extensionTag)#/tests/cfadminpassword.txt" variable="passw" />
+		<cfset session.passwordweb = passw />
+		<cfset session.passwordserver = passw />
   </cffunction>
+
+	<cffunction name="tearDown" returntype="void" access="public">
+		<cftry>
+			<cfset testUnInstall() />	
+		<cfcatch>
+			<!--- just in case the test failed --->
+		</cfcatch>
+		</cftry>
+	</cffunction>
+
 
 	<cffunction name="dumpvar" access="private">
 		<cfargument name="var">
@@ -29,23 +47,64 @@
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="testInstall">
+	<cffunction name="testInstall" access="private">
+		<cfargument name="config" required="true">
 		<cfargument name="uninstall" default="true">
 		<cfscript>
 			var error = structNew(); 
 			var path = "zip://" & expandPath("#variables.extensionzip#!/");
-			var config = variables.defaultconfig;
+			var config = arguments.config;
 			var libraryPath = expandPath('{railo-#request.adminType#}/library');
 			var result = variables.Install.install(error,path,config);
 			if(config.mixed.isBuiltInTag) {
 				assertTrue(fileExists("#libraryPath#/tag/#variables.extensionTag#/cfc/#rereplace(variables.extensionTag,'^cf','')#.cfc"));
 			} else {
-				assertTrue(fileExists("#libraryPath#/../customtags/#variables.extensionTag#/#rereplace(variables.extensionTag,'^cf','')#.cfc"));
+				assertTrue(fileExists("#libraryPath#/../customtags/#variables.extensionTag#/cfc/#rereplace(variables.extensionTag,'^cf','')#.cfc"));
 			}
 //			assertEquals(true,result.status,result.message);
 			if(arguments.uninstall){
 				testUnInstall();
 			}
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testInstallWebBuiltInTag">
+		<cfargument name="uninstall" default="true">
+		<cfscript>
+			var config = variables.defaultconfig;
+			config.mixed.isBuiltInTag = false;
+			request.adminType = "web";
+			testInstall(config,uninstall);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testInstallWebCustomTag">
+		<cfargument name="uninstall" default="true">
+		<cfscript>
+			var config = variables.defaultconfig;
+			config.mixed.isBuiltInTag = true;
+			request.adminType = "web";
+			testInstall(config,uninstall);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="testInstallServerBuiltInTag">
+		<cfargument name="uninstall" default="true">
+		<cfscript>
+			var config = variables.defaultconfig;
+			config.mixed.isBuiltInTag = true;
+			request.adminType = "server";
+			testInstall(config,uninstall);
+		</cfscript>
+	</cffunction>
+
+	<cffunction name="testInstallServerCustomTag">
+		<cfargument name="uninstall" default="true">
+		<cfscript>
+			var config = variables.defaultconfig;
+			config.mixed.isBuiltInTag = false;
+			request.adminType = "server";
+			testInstall(config,uninstall);
 		</cfscript>
 	</cffunction>
 
