@@ -125,6 +125,7 @@
 	</cffunction>
 
 	<cffunction name="extensionlist" access="remote" returntype="query" output="false">
+		<h3>Available Extensions on this Provider</h3>
 		<cfdump var="#this.downloaddir#">
 		<cfdump var="#listApplications()#" /><cfabort />
 	</cffunction>
