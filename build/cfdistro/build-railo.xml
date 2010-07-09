@@ -2,7 +2,7 @@
 
 	<property name="ext.railo.dir" location="${ext.dir}/railo/3.1" />
 	<property name="ext.railo.war.version" value="3.1.2.001" />
-	<property name="ext.railo.war.uri" value="http://www.getrailo.org/down.cfm?item=/railo/remote/download/${ext.railo.war.version}/custom/all/railo-${ext.railo.war.version}.war" />
+	<property name="ext.railo.war.uri" value="http://www.getrailo.org/railo/remote/download/${ext.railo.war.version}/custom/all/railo-${ext.railo.war.version}.war" />
 	<property name="ext.railo.war" location="${ext.railo.dir}/railo-${ext.railo.war.version}.war" />
 	<property name="ext.railo.war.dir" location="${ext.railo.dir}/railo.war" />
 	<property name="railo.patch.version" value="3.1.2.014" />
