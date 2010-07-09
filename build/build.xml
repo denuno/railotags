@@ -21,8 +21,10 @@
 		<!-- add urlrewrite filter and rewrite rules -->
 		<!-- getting "Failed to specify text in replace" means you need to escape & like so:  &amp;amp;-->
 		<antcontrib:runtarget target="urlrewritefilter.servlet.install" />
-		<urlrewrite name="root" note="MAP / TO DEFAULT VIEW" 
+		<urlrewrite name="root" note="MAP / TO pub/index.cfm" 
 			from="^/$" to="/pub/index.cfm" type="forward"/>
+		<urlrewrite name="indexToroot" note="MAP /index.cfm to pub/index.cfm" 
+			from="^/index.cfm" to="/pub/index.cfm" type="forward"/>
 <!--
 		<urlrewrite name="railo" note="SERVE RAILO ADMIN"
 			from="/railo-context/(.*)" to="/railo-context/$1" type="forward" last="true"/>
