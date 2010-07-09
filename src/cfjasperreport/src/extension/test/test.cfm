@@ -1,19 +1,21 @@
 <cfset h2util = createObject("component","H2Util").init(cfadminpassword="testtest") />
+<cffunction name="fakeAction">
+	<cfargument name="name">
+	<cfreturn '?'>
+</cffunction>
+<cfset thisHereDir = getDirectoryFromPath(getCurrentTemplatePath()) />
 <cfoutput>
 	<!--- check to see if we are running from the plugin, define faux function if not --->
 	<cftry>	
-		<cfset action("overview") />
+		<cfset wee = action("overview") />
 	<cfcatch>
-		<cffunction name="action">
-			<cfargument name="name">
-			<cfreturn '?'>
-		</cffunction>
+		<cfset action = fakeAction />
 	</cfcatch>
 	</cftry>
 	<cfdirectory action="list" directory="./examples" name="exampledirs"/>
 	<cfloop query="exampledirs">
 		<h3>#name#</h3>
-		<cfdirectory action="list" directory="./examples/#name#/reports" name="examplereports" filter="*.jrxml"/>
+		<cfdirectory action="list" directory="#thisHereDir#/examples/#name#/reports" name="examplereports" filter="*.jrxml"/>
 		<cfloop query="examplereports">
 			<blockquote>
 				<form action="#action('overview')#" method="post">
@@ -43,7 +45,7 @@
 		<cfinclude template="examples/#form.exampledir#/setup.cfm">
 		<!--- run the report with whatever was set in setup.cfm --->
 		<cf_jasperreport 
-			jrxml="#expandPath('.')#/examples/#form.exampledir#/reports/#form.jrxml#" 
+			jrxml="#thisHereDir#/examples/#form.exampledir#/reports/#form.jrxml#" 
 			filename="#listFirst(form.jrxml,'.')#"
 			dsn="#dsname#"
 			resourcebundle="#resourcebundle#"

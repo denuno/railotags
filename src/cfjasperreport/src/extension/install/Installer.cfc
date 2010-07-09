@@ -30,7 +30,6 @@
 		<cfif find("tag",standards)>
 			<cfset config.isBuiltInTag=config.isBuiltInTag EQ "true" />
 			<cfif config.isBuiltInTag>
-					<cfset request.debug("#getLibraryPath()#/tag")>
 				<cfzip
 					action = "unzip"
 					destination = "#getLibraryPath()#/tag"
