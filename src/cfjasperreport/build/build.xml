@@ -2,10 +2,4 @@
 
 	<import file="template/build.xml"/>	
 	
-	<target name="build">
-
-		<antcall target="build-extension.build" inheritAll="true"></antcall>
-
-	</target>
-
 </project>

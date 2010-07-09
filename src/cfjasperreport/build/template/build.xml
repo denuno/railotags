@@ -128,7 +128,7 @@
 	</target>
 	
 	
-	<target name="build" depends="init,zipLibs,zipTags,zipPlugins,zipFunctions">
+	<target name="build" depends="init,zipLibs,zipTags,zipPlugins,zipFunctions" description="builds the extension">
 		<delete file="${dist}/${extension.archive}" />
 		<copy overwrite="yes" verbose="no" file="${extension.build}/info.xml" tofile="${temp.dir}/info.xml" filtering="true">
 			<filterchain>
@@ -142,6 +142,7 @@
 				</filterreader>
 			</filterchain>
 		</copy>
+		<delete file="${dist}/${extension.archive}"/>
 		<zip destfile="${dist}/${extension.archive}">
 			<fileset file="${docs.dir}/license.txt" />
 			<fileset file="${temp.dir}/info.xml" />
@@ -174,15 +175,19 @@
 		<fail message="one or more tests failed" />
 	</target>
 
-	<target name="build-test" depends="build,test">
+	<target name="build-test" depends="build,test" description="build, then run MXUnit tests">
 	</target>
 
-	<target name="build-revision" depends="revision">
-	   <antcall target="build"></antcall>
-	   <antcall target="test"></antcall>
+	<target name="build-revision" depends="revision" description="build and bump revision up">
+		<antcall target="build"/>
 	</target>
 
-	<target name="junitreport" description="Create a report for the rest result" depends="mxunittest">
+	<target name="build-revision-test" depends="revision">
+		<antcall target="build"/>
+		<antcall target="test"/>
+	</target>
+
+	<target name="junitreport" depends="mxunittest">
 		<mkdir dir="${mxunit.junit.out.dir.html}" />
 		<junitreport todir="${mxunit.junit.out.dir.html}">
 			<fileset dir="${mxunit.outputdir}">
@@ -209,29 +214,33 @@
 	
 <!-- BUILD INCREMENTATION TARGETS -->
 
-	<target name="dist">
+	<target name="dist" description="bumps the minor build number">
 	  <antcall target="minor"></antcall>
+	  <antcall target="build"></antcall>
 	</target>
 	
 	<target name="revision">
-	    <propertyfile  file="buildinfo.properties">
+	    <propertyfile  file="${basedir}/buildinfo.properties">
 	            <entry key="build.revision.number" type="int" operation="+" value="1" pattern="00"/>
 	    </propertyfile>
+		<echo message="bumped revision build number"/> 
 	</target>
 	
 	<target name="minor">
-	    <propertyfile  file="buildinfo.properties">
+	    <propertyfile  file="${basedir}/buildinfo.properties">
 	            <entry key="build.minor.number" type="int" operation="+" value="1" pattern="00"/>
 	            <entry key="build.revision.number" type="int" value="0" pattern="00"/>
 	    </propertyfile>
+		<echo message="bumped minor build number"/> 
 	</target>
 	
 	<target name="major">
-	    <propertyfile  file="buildinfo.properties">
+	    <propertyfile  file="${basedir}/buildinfo.properties">
 	            <entry key="build.major.number" type="int" operation="+" value="1" pattern="00"/>
 	            <entry key="build.minor.number" type="int" value="0" pattern="00"/>
 	            <entry key="build.revision.number" type="int" value="0" pattern="00"/>
 	    </propertyfile>
+		<echo message="bumped major build number"/> 
 	</target>
 
 </project>
