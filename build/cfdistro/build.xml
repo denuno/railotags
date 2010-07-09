@@ -667,7 +667,7 @@
 	<target name="cfantrunner.install" if="cfantrunner.install">
 		<requires-ext resource="${ext.dir}/cfmltags/cfantrunner/" />
 		<requires-ext resource="${ext.dir}/cfmltags/cfantrunner-lib/" />
-		<customtag physical="${ext.dir}/cfmltags/cfantrunner" virtual="/cfantrunner" />
+		<customtag physical="@src.dir@/../build/cfdistro/ext/cfmltags/cfantrunner" virtual="/cfantrunner" />
 		<addlibs from="${ext.dir}/cfmltags/cfantrunner-lib" />		
 	</target>
 
@@ -730,6 +730,9 @@ if [ -z "$1" ]; then
 	if [ "$opt" = "start" ]; then
 		build/cfdistro/ant/bin/ant -f build/build.xml build.localdev.start.launch
 		exit
+	elif [ "$opt" = "stop" ]; then
+		build/cfdistro/ant/bin/ant -f build/build.xml runwar.stop
+		exit
 	elif [ "$opt" = "help" ]; then
 		echo "usage (skips this prompt): ${distro.name}.sh [start|stop|{target}]"
 	elif [ "$opt" = "list-targets" ]; then
@@ -754,7 +757,7 @@ goto end
 cls
 echo.
 echo       ${distro.name} menu
-echo.      usage: ${distro.name}.bat [start|stop|{target}]
+REM echo       usage: ${disstro.name}.bat [start|stop|{target}]
 echo.
 echo       1. Start server and open browser
 echo       2. Stop server
@@ -765,10 +768,10 @@ set choice=
 set /p choice=      Enter option 1, 2, 3 or 4 :
 echo.
 if not '%choice%'=='' set choice=%choice:~0,1%
-if '%choice%'=='1' goto start
-if '%choice%'=='2' goto stop
+if '%choice%'=='1' goto startServer
+if '%choice%'=='2' goto stopServer
 if '%choice%'=='3' goto listTargets
-if '%choice%'=='4' goto End
+if '%choice%'=='4' goto end
 ::
 echo.
 echo.
@@ -777,13 +780,13 @@ echo.
 pause
 goto MENU
 ::
-:start
+:startServer
 cls
 build/cfdistro/ant/bin/ant -f build/build.xml build.localdev.start.launch
 echo to stop the server, run this again or run: ${distro.name}.bat stop
 goto end
 ::
-:stop
+:stopServer
 build/cfdistro/ant/bin/ant -f build/build.xml runwar.stop
 goto end
 ::
@@ -800,6 +803,7 @@ pause
 EXIT
 		]]>
 		</echo>
+		<fixcrlf srcdir="${dist.dir}" includes="**/*.bat" eol="crlf" />
 		<chmod file="${dist.dir}/${distro.name}-build/${distro.name}.sh" perm="ugo+rx"/>
 		<chmod file="${dist.dir}/${distro.name}-build/build/cfdistro/ant/bin/ant" perm="ugo+rx"/>
 		<zip destfile="${dist.dir}/${distro.name}-build.zip" basedir="${dist.dir}/${distro.name}-build/"/>
