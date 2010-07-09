@@ -823,7 +823,7 @@ EXIT
 		<chmod file="${dist.dir}/${distro.name}-build/${distro.name}.sh" perm="ugo+rx"/>
 		<chmod file="${dist.dir}/${distro.name}-build/build/cfdistro/ant/bin/ant" perm="ugo+rx"/>
 		<!-- use our macrodef that uses OS zip executable so we retain file permissions -->
-		<zipdir destfile="${dist.dir}/${distro.name}-build.zip" sourcedir="${dist.dir}/${distro.name}-build/"/>
+		<zipdir destfile="${dist.dir}/${distro.name}-build.zip" sourcedir="${dist.dir}/"/>
 	</target>
 
 	<target name="cfdistro.executable">
