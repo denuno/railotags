@@ -48,7 +48,7 @@
                 
         <cfset var message='#variables.extensionTag# is now successfully installed! Rock on with your bad self.'>
 		<cfif config.isBuiltInTag OR config.installTestPlugin>
-			<cfset message = message & "<br /><strong>P.S.</strong> <font color='red'>You will need to restart the server to use the new functionality!</font>">
+			<cfset message = message & "<br /><strong>P.S.</strong> <font color='red'>You will need to <a href=""#getContextRoot()#/railo-context/admin/server.cfm?action=services.restart"">restart the server</a> to use the new functionality!</font>">
 		</cfif>
         <cfreturn message>
         
