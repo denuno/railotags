@@ -17,6 +17,20 @@
 		</fileset>
 	</path>
 
+	<macrodef name="zipdir">
+		<attribute name="destfile"/>
+		<attribute name="sourcedir"/>
+		<sequential>
+			<echo>Building zip: @{destfile}</echo>
+			<exec executable="zip" dir="@{sourcedir}">
+			<arg value="-qR"/>
+			<arg value="@{destfile}"/>
+			<arg value="*"/>
+			<arg value="-x *.svn* *.git*"/>
+			</exec>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="sanitizePath">
 		<attribute name="property" />
 		<attribute name="input" />
@@ -808,7 +822,8 @@ EXIT
 		<fixcrlf srcdir="${dist.dir}" includes="**/*.bat" eol="crlf" />
 		<chmod file="${dist.dir}/${distro.name}-build/${distro.name}.sh" perm="ugo+rx"/>
 		<chmod file="${dist.dir}/${distro.name}-build/build/cfdistro/ant/bin/ant" perm="ugo+rx"/>
-		<zip destfile="${dist.dir}/${distro.name}-build.zip" basedir="${dist.dir}/${distro.name}-build/"/>
+		<!-- use our macrodef that uses OS zip executable so we retain file permissions -->
+		<zipdir destfile="${dist.dir}/${distro.name}-build.zip" sourcedir="${dist.dir}/${distro.name}-build/"/>
 	</target>
 
 	<target name="cfdistro.executable">
@@ -824,8 +839,9 @@ set ANT_HOME=%CD%\build\cfdistro\ant\
 cfdistro/ant/bin/ant -f build.xml %1
 goto end
 :error
-echo usage: ${distro.name}.bat [start|stop]
-echo usage: ${distro.name}.bat [start|stop]
+echo usage:
+echo ${distro.name}.bat start
+echo ${distro.name}.bat stop
 :end
 		]]>
 		</echo>
