@@ -667,7 +667,7 @@
 	<target name="cfantrunner.install" if="cfantrunner.install">
 		<requires-ext resource="${ext.dir}/cfmltags/cfantrunner/" />
 		<requires-ext resource="${ext.dir}/cfmltags/cfantrunner-lib/" />
-		<customtag physical="@src.dir@/../build/cfdistro/ext/cfmltags/cfantrunner" virtual="/cfantrunner" />
+		<customtag physical="${ext.dir}/cfmltags/cfantrunner" virtual="/cfantrunner" />
 		<addlibs from="${ext.dir}/cfmltags/cfantrunner-lib" />		
 	</target>
 
@@ -712,7 +712,9 @@
 
 	<target name="cfdistro.dist" depends="clean" description="creats a minimal build">
 		<copy todir="${dist.dir}/${distro.name}-build/build" verbose="false">
-			<fileset dir="${basedir}/" excludesfile="${creds.token.file}"/>
+			<fileset dir="${basedir}/" excludesfile="${creds.token.file}">
+				<exclude name="cfdistro/ext/**" />
+			</fileset>			
 		</copy>
 		<loadfile property="project.build.file" srcFile="${dist.dir}/${distro.name}-build/build/build.properties" />
 		<antcontrib:propertyregex property="project.build.file" input="${project.build.file}" global="false" override="yes" 
