@@ -1,6 +1,7 @@
 package runwar;
 
 import java.io.IOException;
+import java.io.File;
 
 import java.io.PrintStream;
 import java.io.FileOutputStream;
@@ -55,11 +56,11 @@ public class Start {
     
 	public static void main(String[] args) throws Exception {
 		PrintStream stdout = null;
-		String warPath = args[0];
+		String warPath = new File(args[0]).toURL().toString();
 		String contextPath = args[1];
 		int portNumber = Integer.parseInt(args[2]);
 		int socketNumber = Integer.parseInt(args[3]);
-		String logDir = args[4];
+		String logDir = new File(args[4]).toURL().toString();
 		
 		try {
 			PrintStream out = new PrintStream(new RolloverFileOutputStream(logDir + "runner.log.txt",true,-1));
@@ -104,7 +105,7 @@ public class Start {
         requestLog.setLogTimeZone("GMT");
         requestLogHandler.setRequestLog(requestLog);		
 		
-		WebAppContext context = new WebAppContext(contexts,"file:"+warPath + "/",contextPath);
+		WebAppContext context = new WebAppContext(contexts,warPath,contextPath);
         context.setConfigurationClasses(__plusConfigurationClasses);
 //		context.setContextPath(contextPath);
 		//context.setResourceBase(warPath);

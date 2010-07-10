@@ -5,7 +5,7 @@
 	<property name="ext.railo.war.uri" value="http://www.getrailo.org/railo/remote/download/${ext.railo.war.version}/custom/all/railo-${ext.railo.war.version}.war" />
 	<property name="ext.railo.war" location="${ext.railo.dir}/railo-${ext.railo.war.version}.war" />
 	<property name="ext.railo.war.dir" location="${ext.railo.dir}/railo.war" />
-	<property name="railo.patch.version" value="3.1.2.014" />
+	<property name="railo.patch.version" value="3.1.2.015" />
 	<property name="railo.patch.buildtype" value="dev" />
 	<property name="railo.customtags.dir" value="${war.temp.dir}/WEB-INF/lib/railo-server/context/customtags" />
 	

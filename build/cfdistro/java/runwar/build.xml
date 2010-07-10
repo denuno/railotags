@@ -39,8 +39,13 @@
 	<target name="runwar.compile">
 		<delete dir="${runwar.basedir}/bin/runwar/"/>
 		<mkdir dir="${runwar.basedir}/bin/runwar/"/>
+		<!--
 		<javac srcdir="${runwar.basedir}/src/runwar" destdir="${runwar.basedir}/bin/runwar"
     		classpathref="runwar.lib.path"/>
+    	-->
+		<javac-ecj srcdir="${runwar.basedir}/src/runwar" destdir="${runwar.basedir}/bin/runwar"
+    		classpathref="runwar.lib.path"/>
+		    		
 	</target>
 
 	<target name="runwar.jar" depends="runwar.compile">
@@ -111,7 +116,7 @@
 		<sequential>
 			<!-- <echoproperties prefix="runwar"/> -->
 			<java classname="runwar.Start" classpathref="runwar.lib.path" fork="true" spawn="true" maxmemory="${runwar.maxmemory}">
-				<arg value="${runwar.war.path}" />
+				<arg value="&quot;${runwar.war.path}&quot;" />
 				<arg value="${runwar.war.contextpath}" />
 				<arg value="${runwar.port}" />
 				<arg value="${runwar.stop.socket}" />

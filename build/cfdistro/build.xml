@@ -16,7 +16,32 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
-
+	
+	<macrodef name="javac-ecj">
+		<attribute name="srcdir" />
+		<attribute name="destdir" />
+		<attribute name="classpath" default="" />
+		<attribute name="classpathref" default="" />
+		<attribute name="target" default="1.5" />
+		<attribute name="compliance" default="1.5" />
+		<sequential>
+			<echo message="Compiling @{srcdir}"/>
+			<path id="in.classpathref" path="rt.jar:@{classpath}:${toString:classpathref}" />
+			<path id="javac-ecj.compile.classpath" path="rt.jar:@{classpath}:${toString:@{classpathref}}" />
+			<java jar="${cfdistro.basedir}/lib/ecj-3.6.jar" fork="true" classpathref="build.lib.path">
+				<arg value="-@{compliance}" />
+				<arg value="-warn:none" />
+				<arg value="-d" />
+				<arg value="@{destdir}" />
+				<arg value="-target" />
+				<arg value="@{target}" />
+				<arg value="-classpath" />
+				<arg value="${toString:javac-ecj.compile.classpath}" />
+				<arg value="@{srcdir}" />
+			</java>
+		</sequential>
+	</macrodef>
+	
 	<macrodef name="zipdir">
 		<attribute name="destfile"/>
 		<attribute name="sourcedir"/>
@@ -767,7 +792,7 @@ build/cfdistro/ant/bin/ant -f build/build.xml $1
 		<echo file="${dist.dir}/${distro.name}-build/${distro.name}.bat"><![CDATA[@echo off
 if "%1" == "" goto MENU
 set ANT_HOME=%CD%\build\cfdistro\ant\
-build/cfdistro/ant/bin/ant -f build/build.xml %1
+call build/cfdistro/ant/bin/ant -f build/build.xml %1
 goto end
 :MENU
 cls
@@ -798,16 +823,16 @@ goto MENU
 ::
 :startServer
 cls
-build/cfdistro/ant/bin/ant -f build/build.xml build.localdev.start.launch
+call build/cfdistro/ant/bin/ant -f build/build.xml build.localdev.start.launch
 echo to stop the server, run this again or run: ${distro.name}.bat stop
 goto end
 ::
 :stopServer
-build/cfdistro/ant/bin/ant -f build/build.xml runwar.stop
+call build/cfdistro/ant/bin/ant -f build/build.xml runwar.stop
 goto end
 ::
 :listTargets
-build/cfdistro/ant/bin/ant -f build/build.xml help
+call build/cfdistro/ant/bin/ant -f build/build.xml help
 echo       press any key ...
 pause > nul
 goto MENU
