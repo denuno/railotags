@@ -19,7 +19,7 @@ cd $(dirname $0)
 exec $JAVA_EXE -Xmx200m -jar ${cfdistro.basedir}/lib/${jetty-runner.jar} --port ${runwar.port} --path ${war.contextpath} $* ${war.temp.dir}]]>
 	</echo>
 	<chmod file="${basedir}/start.sh" perm="ugo+rx"/>
-	<echo file="${basedir}/start.bat"><![CDATA[java -Xmx200m -jar ${cfdistro.basedir}/lib/${jetty-runner.jar} --port ${runwar.port} --path ${war.contextpath} %1 ${war.temp.dir}]]></echo>
+	<echo file="${basedir}/start.bat"><![CDATA[java -Xmx200m -jar "${cfdistro.basedir}/lib/${jetty-runner.jar}" --port ${runwar.port} --path ${war.contextpath} %1 "${war.temp.dir}"]]></echo>
 	<sanitizeContextPath />
 </target>
 </project>

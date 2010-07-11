@@ -116,7 +116,7 @@
 		<sequential>
 			<!-- <echoproperties prefix="runwar"/> -->
 			<java classname="runwar.Start" classpathref="runwar.lib.path" fork="true" spawn="true" maxmemory="${runwar.maxmemory}">
-				<arg value="&quot;${runwar.war.path}&quot;" />
+				<arg value="${runwar.war.path}" />
 				<arg value="${runwar.war.contextpath}" />
 				<arg value="${runwar.port}" />
 				<arg value="${runwar.stop.socket}" />
@@ -138,6 +138,8 @@
 					-->
 				</and>
 			</waitfor>
+			<echo message="waiting for cfml engine"/>
+			<sleep seconds="5" />
 			<antcontrib:runtarget target="if.toolong.echo" />
 			<echo message="stop jetty by typing: ant runwar.stop"/>
 		</sequential>

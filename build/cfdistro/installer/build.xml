@@ -42,7 +42,7 @@
 		<requires-ext resource="${ext.dir}/launch4j" />
 		<requires-ext resource="${ext.dir}/izpack" />
 
-<!--
+		<!--
 		<taskdef resource="net/jtools/classloadertask/antlib.xml" classpath="${antLibs}/ant-classloadertask.jar" />
 		<classloader loader="project">
 			<classpath>
@@ -63,7 +63,7 @@
 			<entry key="build.number" type="int" default="0000" operation="+" pattern="0000" />
 		</propertyfile>
 		<property file="${basedir}/buildinfo.properties" />
-<!--
+		<!--
 		<echoproperties />
 -->
 		<copy overwrite="yes" verbose="no" file="${installXMLfile}" tofile="${parsedInstallXMLfile}" />
@@ -194,8 +194,22 @@
 			dest.file="${parsedInstallXMLfile}" />
 	</target>
 
-	<target name="installer.template.cfdistro" description="build the install izpack jar" depends="izpack-xml">
-		<requires-ext resource="${ext.dir}/ant-lib" />
+	<target name="installer.template.cfdistro" description="build the install izpack jar">
+		<requires-ext resource="${ext.dir}/installer" />
+		<!--
+		<copy todir="${basedir}/installer" verbose="false">
+			<fileset dir="${ext.dir}/installer" />
+		</copy>
+		<move todir="${basedir}/installer/packs/${distro.name}">
+			<fileset dir="${basedir}/installer/packs/cfdistro" />
+		</move>
+		<move file="${basedir}/installer/packs/${distro.name}/cfdistro-pack.xml"
+			tofile="${basedir}/installer/packs/${distro.name}/${distro.name}-pack.xml"/>
+		<move file="${basedir}/installer/packs/${distro.name}/cfdistro.properties"
+			tofile="${basedir}/installer/packs/${distro.name}/${distro.name}.properties"/>
+		-->
+		<move file="${basedir}/installer/packs/${distro.name}/img/cfdistro-logo.png"
+			tofile="${basedir}/installer/packs/${distro.name}/img/${distro.name}-logo.png"/>
 	</target>
 
 	<target name="buildInstallJar" description="build the install izpack jar" depends="izpack-xml">

@@ -239,9 +239,9 @@
 		<xmltask source="${target.dir}/.project" dest="${target.dir}/.project" outputter="simple" />
 		<copy todir="${target.dir}/build/cfdistro" verbose="false">
 			<fileset dir="${cfdistro.basedir}/" includes="*.*" />
-			<fileset dir="${cfdistro.basedir}/" includes="lib/**,ext/railo/3.1/**,ext/jboss/**,ext/urlrewritefilter/**,org/**,runwar/**,java/**" />
+			<fileset dir="${cfdistro.basedir}/" includes="lib/**,ext/railo/3.1/**,ext/jboss/**,ext/urlrewritefilter/**,org/**,ant/**,installer/**,java/**" />
 		</copy>
-		<property name="skeleton.dir" value="${cfdistro.basedir}/skeleton"/>
+		<property name="skeleton.dir" value="${cfdistro.basedir}/skeleton/default"/>
 		<copy todir="${target.dir}" verbose="false">
 			<filterchain>
 				<replacetokens>
@@ -861,7 +861,7 @@ ${cfdistro.basedir}/ant/bin/ant -f build.xml $1
 		<echo file="${basedir}/cfdistro.bat"><![CDATA[@echo off
 if "%1" == "" goto error
 set ANT_HOME=%CD%\build\cfdistro\ant\
-cfdistro/ant/bin/ant -f build.xml %1
+call cfdistro\ant\bin\ant.bat -f build.xml %1
 goto end
 :error
 echo usage:

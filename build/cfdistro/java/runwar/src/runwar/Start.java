@@ -56,11 +56,11 @@ public class Start {
     
 	public static void main(String[] args) throws Exception {
 		PrintStream stdout = null;
-		String warPath = new File(args[0]).toURL().toString();
+		String warPath = new File(args[0]).toURI().toURL().toString();
 		String contextPath = args[1];
 		int portNumber = Integer.parseInt(args[2]);
 		int socketNumber = Integer.parseInt(args[3]);
-		String logDir = new File(args[4]).toURL().toString();
+		String logDir = args[4];
 		
 		try {
 			PrintStream out = new PrintStream(new RolloverFileOutputStream(logDir + "runner.log.txt",true,-1));
@@ -70,6 +70,11 @@ public class Start {
 		} catch (Exception e) {
 			// Sigh. Couldn't open the file.
 			System.out.println("Redirect:  Unable to open output file!");
+		}
+
+		if(!new File(args[0]).exists()) {
+			System.out.println("No war file "+new File(args[4]).toString());
+			System.exit(1);
 		}
 
 		server = new Server();
