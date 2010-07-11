@@ -766,7 +766,7 @@
 export ANT_HOME="build/cfdistro/ant/"
 if [ -z "$1" ]; then
 	echo "${distro.name} control script"
-	OPTIONS="start stop help list-targets exit"
+	OPTIONS="start stop help list-targets update exit"
 	select opt in $OPTIONS; do
 	if [ "$opt" = "start" ]; then
 		build/cfdistro/ant/bin/ant -f build/build.xml build.localdev.start.launch
@@ -778,6 +778,8 @@ if [ -z "$1" ]; then
 		echo "usage (skips this prompt): ${distro.name}.sh [start|stop|{target}]"
 	elif [ "$opt" = "list-targets" ]; then
 		build/cfdistro/ant/bin/ant -f build/build.xml help
+	elif [ "$opt" = "update" ]; then
+		build/cfdistro/ant/bin/ant -f build/build.xml project.update
 	elif [ "$opt" = "exit" ]; then
 		exit
 	else
@@ -790,9 +792,9 @@ build/cfdistro/ant/bin/ant -f build/build.xml $1
 		]]>
 		</echo>
 		<echo file="${dist.dir}/${distro.name}-build/${distro.name}.bat"><![CDATA[@echo off
-if "%1" == "" goto MENU
 set ANT_HOME=%CD%\build\cfdistro\ant\
-call build/cfdistro/ant/bin/ant -f build/build.xml %1
+if "%1" == "" goto MENU
+call build\cfdistro\ant\bin\ant.bat -f build/build.xml %1
 goto end
 :MENU
 cls
@@ -803,16 +805,18 @@ echo.
 echo       1. Start server and open browser
 echo       2. Stop server
 echo       3. List available targets
-echo       4. Quit
+echo       4. Update project
+echo       5. Quit
 echo.
 set choice=
-set /p choice=      Enter option 1, 2, 3 or 4 :
+set /p choice=      Enter option 1, 2, 3, 4 or 5 :
 echo.
 if not '%choice%'=='' set choice=%choice:~0,1%
 if '%choice%'=='1' goto startServer
 if '%choice%'=='2' goto stopServer
 if '%choice%'=='3' goto listTargets
-if '%choice%'=='4' goto end
+if '%choice%'=='4' goto updateProject
+if '%choice%'=='5' goto end
 ::
 echo.
 echo.
@@ -823,16 +827,22 @@ goto MENU
 ::
 :startServer
 cls
-call build/cfdistro/ant/bin/ant -f build/build.xml build.localdev.start.launch
+call build\cfdistro\ant\bin\ant.bat -f build/build.xml build.localdev.start.launch
 echo to stop the server, run this again or run: ${distro.name}.bat stop
 goto end
 ::
 :stopServer
-call build/cfdistro/ant/bin/ant -f build/build.xml runwar.stop
+call build\cfdistro\ant\bin\ant.bat -f build/build.xml runwar.stop
 goto end
 ::
 :listTargets
-call build/cfdistro/ant/bin/ant -f build/build.xml help
+call build\cfdistro\ant\bin\ant.bat -f build/build.xml help
+echo       press any key ...
+pause > nul
+goto MENU
+::
+:updateProject
+call build\cfdistro\ant\bin\ant.bat -f build/build.xml project.update
 echo       press any key ...
 pause > nul
 goto MENU
