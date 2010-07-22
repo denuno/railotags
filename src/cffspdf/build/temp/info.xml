@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<extensions>
+<extension>
+	<extensionId>cffspdf</extensionId>
+	<extensionType>all</extensionType>
+	<extensionName>cffspdf</extensionName>
+	<extensionLabel>cffspdf</extensionLabel>
+	<extensionCodename>harbinger</extensionCodename>
+	<extensionDescription>Run fspdfs from your CFML application</extensionDescription>
+	<extensionSources>Utility</extensionSources>
+	<extensionAuthor>denstar</extensionAuthor>
+	<extensionCategory>Utility</extensionCategory>
+	<extensionImage>http://www.getrailo.org/tasks/sites/railoorg/assets/Image/Images/railo-3-1-release.png</extensionImage>
+	<extensionSupport>http://coldshen.com</extensionSupport>
+	<extensionDocumentation>http://coldshen.com</extensionDocumentation>
+	<extensionForum>http://coldshen.com</extensionForum>
+	<extensionCreated>07-21-2010 00:40:14</extensionCreated>
+	<extensionVersion>00.02.00</extensionVersion>
+	<extensionDownload>/extensions/download/cffspdf-extension.zip</extensionDownload>
+</extension>
+</extensions>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperPrint PUBLIC "-//fspdfs//DTD JasperPrint//EN" "http://fspdfs.sourceforge.net/dtds/jasperprint.dtd">
+
+<jasperPrint name="BarbecueReport" pageWidth="595" pageHeight="842" topMargin="50" leftMargin="40" bottomMargin="50" rightMargin="40" locale="en_US" timezone="America/Denver">
+	<property name="net.sf.fspdfs.export.xml.start.page.index" value="0"/>
+	<property name="net.sf.fspdfs.export.xml.end.page.index" value="0"/>
+	<property name="net.sf.fspdfs.export.xml.page.count" value="1"/>
+	<origin band="title"/>
+	<origin band="detail"/>
+	<page>
+		<line>
+			<reportElement x="40" y="50" width="515" height="1" origin="0"/>
+		</line>
+		<text textAlignment="Center" textHeight="25.910156" lineSpacingFactor="1.1777344" leadingOffset="-4.640625">
+			<reportElement x="40" y="60" width="515" height="30" origin="0"/>
+			<font size="22"/>
+			<textContent><![CDATA[Barcode Sample]]></textContent>
+		</text>
+		<text textAlignment="Center" textHeight="14.1328125" lineSpacingFactor="1.1777344" leadingOffset="-2.53125">
+			<reportElement x="40" y="100" width="515" height="20" origin="0"/>
+			<font size="12"/>
+			<textContent><![CDATA[This sample uses Barbecue Version 1.5beta1]]></textContent>
+		</text>
+		<text textAlignment="Center" textHeight="14.1328125" lineSpacingFactor="1.1777344" leadingOffset="-2.53125" hyperlinkType="Reference" hyperlinkReference="http://barbecue.sourceforge.net/">
+			<reportElement x="40" y="120" width="515" height="20" origin="0"/>
+			<font size="12"/>
+			<textContent><![CDATA[http://barbecue.sourceforge.net/]]></textContent>
+		</text>
+		<image scaleImage="RetainShape">
+			<reportElement x="40" y="150" width="400" height="50" origin="0"/>
+			<imageSource>
+				<![CDATA[build/reports/BarbecueReport.jrpxml_files/img_0]]>
+			</imageSource>
+		</image>
+		<image scaleImage="RetainShape">
+			<reportElement x="40" y="210" width="400" height="50" origin="0"/>
+			<imageSource>
+				<![CDATA[build/reports/BarbecueReport.jrpxml_files/img_1]]>
+			</imageSource>
+		</image>
+		<image scaleImage="RetainShape">
+			<reportElement x="40" y="270" width="400" height="50" origin="0"/>
+			<imageSource>
+				<![CDATA[build/reports/BarbecueReport.jrpxml_files/img_2]]>
+			</imageSource>
+		</image>
+		<image scaleImage="RetainShape">
+			<reportElement x="40" y="330" width="400" height="50" origin="0"/>
+			<imageSource>
+				<![CDATA[build/reports/BarbecueReport.jrpxml_files/img_3]]>
+			</imageSource>
+		</image>
+	</page>
+</jasperPrint>

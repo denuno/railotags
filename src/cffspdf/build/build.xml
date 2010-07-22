@@ -1,0 +1,5 @@
+<project name="cffspdfs-build" default="build-test">
+
+	<import file="template/build.xml"/>	
+	
+</project>

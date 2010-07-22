@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperPrint PUBLIC "-//fspdfs//DTD JasperPrint//EN" "http://fspdfs.sourceforge.net/dtds/jasperprint.dtd">
+
+<jasperPrint name="LandscapeReport" pageWidth="842" pageHeight="595" topMargin="0" leftMargin="0" bottomMargin="0" rightMargin="0" orientation="Landscape" locale="en_US" timezone="America/Denver">
+	<property name="net.sf.fspdfs.export.xml.start.page.index" value="0"/>
+	<property name="net.sf.fspdfs.export.xml.end.page.index" value="0"/>
+	<property name="net.sf.fspdfs.export.xml.page.count" value="1"/>
+	<origin band="title"/>
+	<origin band="detail"/>
+	<page>
+		<text textHeight="11.777344" lineSpacingFactor="1.1777344" leadingOffset="-2.109375">
+			<reportElement mode="Opaque" x="0" y="0" width="50" height="50" backcolor="#333333" origin="0"/>
+			<textContent><![CDATA[.]]></textContent>
+		</text>
+		<text textHeight="11.777344" lineSpacingFactor="1.1777344" leadingOffset="-2.109375">
+			<reportElement mode="Opaque" x="0" y="545" width="50" height="50" backcolor="#333333" origin="0"/>
+			<textContent><![CDATA[.]]></textContent>
+		</text>
+		<text textHeight="11.777344" lineSpacingFactor="1.1777344" leadingOffset="-2.109375">
+			<reportElement mode="Opaque" x="792" y="0" width="50" height="50" backcolor="#333333" origin="0"/>
+			<textContent><![CDATA[.]]></textContent>
+		</text>
+		<text textHeight="11.777344" lineSpacingFactor="1.1777344" leadingOffset="-2.109375">
+			<reportElement mode="Opaque" x="792" y="545" width="50" height="50" backcolor="#333333" origin="0"/>
+			<textContent><![CDATA[.]]></textContent>
+		</text>
+		<rectangle radius="0">
+			<reportElement x="100" y="0" width="200" height="595" origin="0"/>
+		</rectangle>
+		<rectangle radius="0">
+			<reportElement mode="Transparent" x="0" y="100" width="842" height="200" origin="0"/>
+		</rectangle>
+		<text textHeight="25.910156" lineSpacingFactor="1.1777344" leadingOffset="-4.640625">
+			<reportElement x="100" y="100" width="150" height="30" origin="0"/>
+			<font size="22"/>
+			<textContent><![CDATA[LANDSCAPE]]></textContent>
+		</text>
+	</page>
+</jasperPrint>

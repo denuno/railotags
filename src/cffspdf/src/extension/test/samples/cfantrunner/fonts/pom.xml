@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fspdfs</groupId>
+	<artifactId>fspdfs-fonts</artifactId>
+	<version>3.7.3</version>
+	<packaging>jar</packaging>
+	<name>fspdfs Font Extension</name>
+	<url>http://fspdfs.sourceforge.net</url>
+	<description>fspdfs Library Font Extension</description>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License</name>
+			<url>http://fspdfs.sourceforge.net/license.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:svn:http://jasperforge.org/svn/repos/fspdfs</connection>
+		<tag>jr-3-7-3</tag>
+		<url>http://jasperforge.org/scm/viewvc.php/?root=fspdfs</url>
+	</scm>
+	<repositories>
+		<repository>
+			<id>fspdfs</id>
+			<url>http://fspdfs.sourceforge.net/maven2</url>
+		</repository>
+	</repositories>
+	<build>
+		<sourceDirectory>./</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>./</directory>
+				<includes>
+					<include>**/fspdfs_extension.properties</include>
+					<include>**/fonts.xml</include>
+					<include>**/*.ttf</include>
+					<include>**/LICENSE</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Built-By>Jaspersoft</Built-By>
+						</manifestEntries>
+						<manifestSections>
+							<manifestSection>
+								<name>net/sf/fspdfs/fonts/</name>
+								<manifestEntries>
+									<Specification-Title>fspdfs Library Font Extension</Specification-Title>
+									<Specification-Version>${pom.version}</Specification-Version>
+									<Specification-Vendor>Jaspersoft</Specification-Vendor>
+									<Implementation-Title>net.sf.fspdfs.fonts</Implementation-Title>
+									<Implementation-Version>${pom.version}</Implementation-Version>
+									<Implementation-Vendor>Jaspersoft</Implementation-Vendor>
+								</manifestEntries>
+							</manifestSection>
+						</manifestSections>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
